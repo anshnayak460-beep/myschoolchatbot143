@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My School AI Chatbot</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(135deg,#1565c0,#7b1fa2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:15px;
+}
+
+.chat{
+  width:100%;
+  max-width:650px;
+  height:90vh;
+  background:white;
+  border-radius:20px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 10px 35px #0005;
+}
+
+.header{
+  background:#1565c0;
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+
+.header h1{
+  margin:0;
+  font-size:25px;
+}
+
+.header p{
+  margin:7px 0 0;
+}
+
+#chatBox{
+  flex:1;
+  padding:20px;
+  overflow-y:auto;
+  background:#f5f7fb;
+}
+
+.message{
+  margin:12px 0;
+  display:flex;
+}
+
+.message div{
+  max-width:82%;
+  padding:12px 15px;
+  border-radius:16px;
+  line-height:1.5;
+  white-space:pre-wrap;
+}
+
+.bot{
+  justify-content:flex-start;
+}
+
+.bot div{
+  background:#e3f2fd;
+  color:#222;
+  border-bottom-left-radius:4px;
+}
+
+.user{
+  justify-content:flex-end;
+}
+
+.user div{
+  background:#1565c0;
+  color:white;
+  border-bottom-right-radius:4px;
+}
+
+.quick{
+  display:flex;
+  gap:7px;
+  padding:10px;
+  overflow-x:auto;
+  background:white;
+}
+
+.quick button{
+  white-space:nowrap;
+  border:0;
+  padding:8px 12px;
+  border-radius:20px;
+  background:#e3f2fd;
+  color:#1565c0;
+  cursor:pointer;
+}
+
+.input{
+  display:flex;
+  gap:8px;
+  padding:12px;
+  border-top:1px solid #ddd;
+}
+
+input{
+  flex:1;
+  padding:14px;
+  border:1px solid #ccc;
+  border-radius:25px;
+  outline:none;
+  font-size:15px;
+}
+
+.send{
+  border:0;
+  background:#1565c0;
+  color:white;
+  padding:0 20px;
+  border-radius:25px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.send:hover{
+  background:#0d47a1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="chat">
+
+  <div class="header">
+    <h1>🎓 My School AI</h1>
+    <p>School Information Assistant</p>
+  </div>
+
+  <div class="quick">
+    <button onclick="ask('School timing kya hai?')">🏫 Timing</button>
+    <button onclick="ask('Admission ke bare me batao')">📝 Admission</button>
+    <button onclick="ask('School me kaun se subjects hain?')">📚 Subjects</button>
+    <button onclick="ask('School holidays kab hain?')">📅 Holidays</button>
+  </div>
+
+  <div id="chatBox">
+
+    <div class="message bot">
+      <div>
+        👋 Namaste! Main aapka School Assistant hoon.
+
+        Aap mujhse school timing, admission,
+        subjects, holidays aur school ke
+        baare mein questions pooch sakte hain.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="input">
+
+    <input
+      id="userInput"
+      type="text"
+      placeholder="Apna question likhiye..."
+      onkeydown="if(event.key==='Enter') sendMessage()"
+    >
+
+    <button class="send" onclick="sendMessage()">
+      Send
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+function addMessage(text,type){
+
+  const chatBox=document.getElementById("chatBox");
+
+  const message=document.createElement("div");
+  message.className="message "+type;
+
+  const content=document.createElement("div");
+  content.textContent=text;
+
+  message.appendChild(content);
+  chatBox.appendChild(message);
+
+  chatBox.scrollTop=chatBox.scrollHeight;
+}
+
+
+function sendMessage(){
+
+  const input=document.getElementById("userInput");
+  const question=input.value.trim();
+
+  if(question==="") return;
+
+  addMessage(question,"user");
+
+  input.value="";
+
+  setTimeout(function(){
+
+    const answer=getAnswer(question);
+
+    addMessage(answer,"bot");
+
+  },500);
+}
+
+
+function ask(question){
+
+  document.getElementById("userInput").value=question;
+
+  sendMessage();
+
+}
+
+
+function getAnswer(question){
+
+  const q=question.toLowerCase();
+
+
+  if(
+    q.includes("hello") ||
+    q.includes("hi") ||
+    q.includes("namaste")
+  ){
+    return "👋 Namaste! Main aapki school information mein help kar sakta hoon.";
+  }
+
+
+  if(
+    q.includes("timing") ||
+    q.includes("time") ||
+    q.includes("samay")
+  ){
+    return "🏫 School Timing:\n\nMonday to Saturday: 8:00 AM - 2:00 PM\n\nApne school ka actual timing yahan change kar sakte hain.";
+  }
+
+
+  if(
+    q.includes("admission") ||
+    q.includes("dakhila")
+  ){
+    return "📝 Admission ke liye school office se contact karein. Aap yahan admission form, documents aur fees ki information add kar sakte hain.";
+  }
+
+
+  if(
+    q.includes("subject") ||
+    q.includes("subjects") ||
+    q.includes("vishay")
+  ){
+    return "📚 Common school subjects:\n\n• Mathematics\n• Science\n• English\n• Hindi\n• Social Science\n• Computer\n\nAap apne school ke subjects yahan customize kar sakte hain.";
+  }
+
+
+  if(
+    q.includes("holiday") ||
+    q.includes("holidays") ||
+    q.includes("chutti")
+  ){
+    return "📅 School holidays ke liye apne school ka official holiday calendar check karein.";
+  }
+
+
+  if(
+    q.includes("principal") ||
+    q.includes("principal kaun")
+  ){
+    return "👨‍🏫 Principal ki information yahan add karein.";
+  }
+
+
+  if(
+    q.includes("teacher") ||
+    q.includes("teachers")
+  ){
+    return "👩‍🏫 Teachers ki list aur subjects ki information yahan add karein.";
+  }
+
+
+  if(
+    q.includes("fee") ||
+    q.includes("fees")
+  ){
+    return "💰 School fees ki exact information ke liye school office se contact karein.";
+  }
+
+
+  if(
+    q.includes("contact") ||
+    q.includes("phone") ||
+    q.includes("number")
+  ){
+    return "📞 School contact number yahan add karein.";
+  }
+
+
+  if(
+    q.includes("location") ||
+    q.includes("address") ||
+    q.includes("kaha")
+  ){
+    return "📍 School address yahan add karein.";
+  }
+
+
+  return "🤖 Main abhi basic school information provide kar raha hoon.\n\nAap School Timing, Admission, Subjects, Holidays, Fees, Teachers ya Contact ke baare mein pooch sakte hain.";
+}
+
+</script>
+
+</body>
+</html>

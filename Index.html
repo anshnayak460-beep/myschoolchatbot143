@@ -2,140 +2,45 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>My School AI Chatbot</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>School AI Chatbot</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  font-family:Arial,sans-serif;
-}
-
+*{box-sizing:border-box;font-family:Arial}
 body{
-  margin:0;
-  min-height:100vh;
-  background:linear-gradient(135deg,#1565c0,#7b1fa2);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:15px;
+  margin:0;background:linear-gradient(135deg,#1565c0,#7b1fa2);
+  min-height:100vh;display:flex;align-items:center;
+  justify-content:center;padding:15px
 }
-
 .chat{
-  width:100%;
-  max-width:650px;
-  height:90vh;
-  background:white;
-  border-radius:20px;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  box-shadow:0 10px 35px #0005;
+  width:100%;max-width:650px;height:90vh;background:#fff;
+  border-radius:20px;overflow:hidden;display:flex;
+  flex-direction:column;box-shadow:0 10px 30px #0005
 }
-
-.header{
-  background:#1565c0;
-  color:white;
-  text-align:center;
-  padding:20px;
+header{
+  background:#1565c0;color:#fff;text-align:center;padding:20px
 }
-
-.header h1{
-  margin:0;
-  font-size:25px;
+header h1{margin:0}
+#chatBox{flex:1;padding:20px;overflow-y:auto;background:#f5f7fb}
+.msg{display:flex;margin:12px 0}
+.msg div{
+  max-width:82%;padding:12px 15px;border-radius:16px;
+  line-height:1.5;white-space:pre-wrap
 }
-
-.header p{
-  margin:7px 0 0;
-}
-
-#chatBox{
-  flex:1;
-  padding:20px;
-  overflow-y:auto;
-  background:#f5f7fb;
-}
-
-.message{
-  margin:12px 0;
-  display:flex;
-}
-
-.message div{
-  max-width:82%;
-  padding:12px 15px;
-  border-radius:16px;
-  line-height:1.5;
-  white-space:pre-wrap;
-}
-
-.bot{
-  justify-content:flex-start;
-}
-
-.bot div{
-  background:#e3f2fd;
-  color:#222;
-  border-bottom-left-radius:4px;
-}
-
-.user{
-  justify-content:flex-end;
-}
-
-.user div{
-  background:#1565c0;
-  color:white;
-  border-bottom-right-radius:4px;
-}
-
-.quick{
-  display:flex;
-  gap:7px;
-  padding:10px;
-  overflow-x:auto;
-  background:white;
-}
-
-.quick button{
-  white-space:nowrap;
-  border:0;
-  padding:8px 12px;
-  border-radius:20px;
-  background:#e3f2fd;
-  color:#1565c0;
-  cursor:pointer;
-}
-
+.bot{justify-content:flex-start}
+.bot div{background:#e3f2fd}
+.user{justify-content:flex-end}
+.user div{background:#1565c0;color:white}
 .input{
-  display:flex;
-  gap:8px;
-  padding:12px;
-  border-top:1px solid #ddd;
+  display:flex;gap:8px;padding:12px;border-top:1px solid #ddd
 }
-
 input{
-  flex:1;
-  padding:14px;
-  border:1px solid #ccc;
-  border-radius:25px;
-  outline:none;
-  font-size:15px;
+  flex:1;padding:14px;border:1px solid #ccc;
+  border-radius:25px;outline:none
 }
-
-.send{
-  border:0;
-  background:#1565c0;
-  color:white;
-  padding:0 20px;
-  border-radius:25px;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-.send:hover{
-  background:#0d47a1;
+button{
+  border:0;border-radius:25px;padding:0 20px;
+  background:#1565c0;color:white;cursor:pointer
 }
 </style>
 </head>
@@ -144,193 +49,164 @@ input{
 
 <div class="chat">
 
-  <div class="header">
-    <h1>🎓 My School AI</h1>
-    <p>School Information Assistant</p>
-  </div>
+<header>
+<h1>🎓 School AI Chatbot</h1>
+<p>Ask your school assistant</p>
+</header>
 
-  <div class="quick">
-    <button onclick="ask('School timing kya hai?')">🏫 Timing</button>
-    <button onclick="ask('Admission ke bare me batao')">📝 Admission</button>
-    <button onclick="ask('School me kaun se subjects hain?')">📚 Subjects</button>
-    <button onclick="ask('School holidays kab hain?')">📅 Holidays</button>
-  </div>
+<div id="chatBox">
+<div class="msg bot">
+<div>👋 Hello! I am your School AI Assistant.
+Ask me anything about your school.</div>
+</div>
+</div>
 
-  <div id="chatBox">
+<div class="input">
+<input id="question"
+placeholder="Type your question..."
+onkeydown="if(event.key==='Enter')sendMessage()">
 
-    <div class="message bot">
-      <div>
-        👋 Namaste! Main aapka School Assistant hoon.
-
-        Aap mujhse school timing, admission,
-        subjects, holidays aur school ke
-        baare mein questions pooch sakte hain.
-      </div>
-    </div>
-
-  </div>
-
-  <div class="input">
-
-    <input
-      id="userInput"
-      type="text"
-      placeholder="Apna question likhiye..."
-      onkeydown="if(event.key==='Enter') sendMessage()"
-    >
-
-    <button class="send" onclick="sendMessage()">
-      Send
-    </button>
-
-  </div>
+<button onclick="sendMessage()">Send</button>
+</div>
 
 </div>
 
 <script>
+async function sendMessage(){
+
+  const input=document.getElementById("question");
+  const question=input.value.trim();
+
+  if(!question)return;
+
+  addMessage(question,"user");
+  input.value="";
+
+  addMessage("🤔 Thinking...","bot");
+
+  try{
+
+    const response=await fetch("/api/chat",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        message:question
+      })
+    });
+
+    const data=await response.json();
+
+    document.querySelector(".bot:last-child")?.remove();
+
+    addMessage(
+      data.reply || "Sorry, no response received.",
+      "bot"
+    );
+
+  }catch(error){
+
+    document.querySelector(".bot:last-child")?.remove();
+
+    addMessage(
+      "⚠️ AI server से connection नहीं हो पाया.",
+      "bot"
+    );
+  }
+}
 
 function addMessage(text,type){
 
-  const chatBox=document.getElementById("chatBox");
+  const box=document.getElementById("chatBox");
 
-  const message=document.createElement("div");
-  message.className="message "+type;
+  const msg=document.createElement("div");
+  msg.className="msg "+type;
 
   const content=document.createElement("div");
   content.textContent=text;
 
-  message.appendChild(content);
-  chatBox.appendChild(message);
+  msg.appendChild(content);
+  box.appendChild(msg);
 
-  chatBox.scrollTop=chatBox.scrollHeight;
+  box.scrollTop=box.scrollHeight;
 }
-
-
-function sendMessage(){
-
-  const input=document.getElementById("userInput");
-  const question=input.value.trim();
-
-  if(question==="") return;
-
-  addMessage(question,"user");
-
-  input.value="";
-
-  setTimeout(function(){
-
-    const answer=getAnswer(question);
-
-    addMessage(answer,"bot");
-
-  },500);
-}
-
-
-function ask(question){
-
-  document.getElementById("userInput").value=question;
-
-  sendMessage();
-
-}
-
-
-function getAnswer(question){
-
-  const q=question.toLowerCase();
-
-
-  if(
-    q.includes("hello") ||
-    q.includes("hi") ||
-    q.includes("namaste")
-  ){
-    return "👋 Namaste! Main aapki school information mein help kar sakta hoon.";
-  }
-
-
-  if(
-    q.includes("timing") ||
-    q.includes("time") ||
-    q.includes("samay")
-  ){
-    return "🏫 School Timing:\n\nMonday to Saturday: 8:00 AM - 2:00 PM\n\nApne school ka actual timing yahan change kar sakte hain.";
-  }
-
-
-  if(
-    q.includes("admission") ||
-    q.includes("dakhila")
-  ){
-    return "📝 Admission ke liye school office se contact karein. Aap yahan admission form, documents aur fees ki information add kar sakte hain.";
-  }
-
-
-  if(
-    q.includes("subject") ||
-    q.includes("subjects") ||
-    q.includes("vishay")
-  ){
-    return "📚 Common school subjects:\n\n• Mathematics\n• Science\n• English\n• Hindi\n• Social Science\n• Computer\n\nAap apne school ke subjects yahan customize kar sakte hain.";
-  }
-
-
-  if(
-    q.includes("holiday") ||
-    q.includes("holidays") ||
-    q.includes("chutti")
-  ){
-    return "📅 School holidays ke liye apne school ka official holiday calendar check karein.";
-  }
-
-
-  if(
-    q.includes("principal") ||
-    q.includes("principal kaun")
-  ){
-    return "👨‍🏫 Principal ki information yahan add karein.";
-  }
-
-
-  if(
-    q.includes("teacher") ||
-    q.includes("teachers")
-  ){
-    return "👩‍🏫 Teachers ki list aur subjects ki information yahan add karein.";
-  }
-
-
-  if(
-    q.includes("fee") ||
-    q.includes("fees")
-  ){
-    return "💰 School fees ki exact information ke liye school office se contact karein.";
-  }
-
-
-  if(
-    q.includes("contact") ||
-    q.includes("phone") ||
-    q.includes("number")
-  ){
-    return "📞 School contact number yahan add karein.";
-  }
-
-
-  if(
-    q.includes("location") ||
-    q.includes("address") ||
-    q.includes("kaha")
-  ){
-    return "📍 School address yahan add karein.";
-  }
-
-
-  return "🤖 Main abhi basic school information provide kar raha hoon.\n\nAap School Timing, Admission, Subjects, Holidays, Fees, Teachers ya Contact ke baare mein pooch sakte hain.";
-}
-
 </script>
 
 </body>
-</html>
+</html>export default async function handler(req, res) {
+
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      reply: "Method not allowed"
+    });
+  }
+
+  try {
+
+    const { message } = req.body;
+
+    if (!message) {
+      return res.status(400).json({
+        reply: "Please enter a question."
+      });
+    }
+
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization":
+            `Bearer ${process.env.GROQ_API_KEY}`
+        },
+
+        body: JSON.stringify({
+
+          model: "llama-3.3-70b-versatile",
+
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are a helpful school AI assistant. " +
+                "Answer students clearly, politely and safely. " +
+                "If you don't know school-specific information, " +
+                "say that you don't know instead of making it up."
+            },
+            {
+              role: "user",
+              content: message
+            }
+          ],
+
+          temperature: 0.5
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(response.status).json({
+        reply: "Groq API error. Please check the server configuration."
+      });
+    }
+
+    const reply =
+      data.choices?.[0]?.message?.content ||
+      "I could not generate a response.";
+
+    return res.status(200).json({ reply });
+
+  } catch (error) {
+
+    console.error(error);
+
+    return res.status(500).json({
+      reply: "Server error. Please try again."
+    });
+  }
+}
